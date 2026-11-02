@@ -1,0 +1,3 @@
+dataset,engine,M,efc,threads,build_seconds,save_seconds,peak_rss_bytes,engine_bytes,file_bytes,load_before,load_after
+glove-25-angular,annvil-keep,16,200,8,17.1737,0.203009,574439424,328476762,328486912,13.6074,15.0698
+sift-128-euclidean,annvil-keep,16,200,8,21.0919,0.257412,1693712384,661528188,661544960,9.62646,10.1455

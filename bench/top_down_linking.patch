@@ -1,0 +1,41 @@
+--- index_orig.cpp	2026-11-02 02:19:09
++++ index_td.cpp	2026-11-02 02:19:10
+@@ -351,26 +351,25 @@
+   }
+ 
+   const int highest_linked = std::min(level, top);
+-  std::vector<std::vector<Candidate>>& picks = scratch.picks;
+-  if (picks.size() <= static_cast<std::size_t>(highest_linked)) {
+-    picks.resize(static_cast<std::size_t>(highest_linked) + 1);
+-  }
+   for (int lc = highest_linked; lc >= 0; --lc) {
+     search_layer(ix, oracle, node, distance, ix.ef_construction, lc, scratch);
+     std::vector<Candidate>& found = scratch.found;
+     found.clear();
+     for (std::size_t i = 0; i < scratch.beam.size(); ++i) {
+-      found.push_back({scratch.beam.distance(i), scratch.beam.id(i)});
++      if (scratch.beam.id(i) != id) {
++        found.push_back({scratch.beam.distance(i), scratch.beam.id(i)});
++      }
+     }
+     select_neighbors<kMetric>(ix, found, ix.M, scratch);
+-    picks[static_cast<std::size_t>(lc)] = scratch.selected;
+-    node = scratch.beam.id(0);
+-    distance = scratch.beam.distance(0);
+-  }
+-
+-  for (int lc = 0; lc <= highest_linked; ++lc) {
+-    const std::vector<Candidate>& chosen = picks[static_cast<std::size_t>(lc)];
+-    write_list(ix.list(id, lc), chosen);
++    const std::vector<Candidate> chosen = scratch.selected;
++    {
++      const std::scoped_lock lock(ix.locks[id % Index::Impl::kLockStripes].mutex);
++      write_list(ix.list(id, lc), chosen);
++    }
++    if (!chosen.empty()) {
++      node = chosen.front().id;
++      distance = chosen.front().distance;
++    }
+     for (const Candidate& neighbor : chosen) {
+       link_back<kMetric>(ix, neighbor.id, id, lc, scratch);
+     }

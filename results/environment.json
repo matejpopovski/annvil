@@ -1,0 +1,17 @@
+{
+  "date_utc": "2026-11-02T12:30:42+00:00",
+  "cpu": "Apple M3 Max",
+  "logical_cores": 14,
+  "performance_cores": 10,
+  "efficiency_cores": 4,
+  "memory_gib": 36,
+  "cache_line_bytes": 128,
+  "l1d_bytes_performance_core": 131072,
+  "os": "macOS-26.6.2-arm64-arm-64bit",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.4.1.1)",
+  "hnswlib_version": "0.8.0",
+  "build_threads": 8,
+  "kernel": "neon",
+  "annvil_flags": "-O3 -mcpu=native",
+  "hnswlib_flags": "-O3 -ffast-math -mcpu=native"
+}

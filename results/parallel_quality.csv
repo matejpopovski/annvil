@@ -1,0 +1,7 @@
+engine,threads,builds,recall_mean,recall_min,recall_max,builds_with_unreachable,worst_unreachable
+annvil-bottom-up,1,1,0.978,0.978,0.978,1,1
+hnswlib,1,1,0.984,0.984,0.984,,
+annvil-bottom-up,8,100,0.95864,0.926,0.978,88,2
+hnswlib,8,100,0.951,0.916,0.976,,
+annvil-top-down,1,1,0.978,0.978,0.978,1,1
+annvil-top-down,8,100,0.94554,0.896,0.97,100,61

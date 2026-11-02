@@ -1,0 +1,39 @@
+--- a.cpp	2026-11-02 05:41:54
++++ b.cpp	2026-11-02 05:41:54
+@@ -198,7 +198,6 @@
+   visited.insert(entry);
+ 
+   const std::uint32_t max_links = ix.max_links(level);
+-  std::array<std::uint32_t, kMaxM0> pending;
+   while (beam.has_unexpanded()) {
+     const std::uint32_t current = beam.expand_next();
+     if (beam.has_unexpanded()) {
+@@ -210,20 +209,17 @@
+     const std::uint32_t* list = ix.list(current, level);
+     const std::uint32_t count = std::min(load_slot(list[0]), max_links);
+ 
+-    // Filter first and compute second, so that every vector is prefetched before
+-    // the first distance stalls on a miss.
+-    std::uint32_t unseen = 0;
++    // hnswlib's loop: prefetch the next neighbour, then compute this one.
+     for (std::uint32_t i = 0; i < count; ++i) {
+       const std::uint32_t id = load_slot(list[1 + i]);
+-      if (visited.insert(id)) {
+-        pending[unseen++] = id;
+-        oracle.prefetch(id);
++      if (i + 1 < count) {
++        oracle.prefetch(load_slot(list[2 + i]));
+       }
+-    }
+-    for (std::uint32_t i = 0; i < unseen; ++i) {
+-      const float d = oracle.distance(pending[i]);
+-      if (d < beam.bound()) {
+-        beam.insert(d, pending[i]);
++      if (visited.insert(id)) {
++        const float d = oracle.distance(id);
++        if (d < beam.bound()) {
++          beam.insert(d, id);
++        }
+       }
+     }
+   }
