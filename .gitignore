@@ -1,0 +1,14 @@
+build/
+build-*/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+data/
+*.hdf5
+*.annb
+*.annvil
+*.hnsw
+.DS_Store
+compile_commands.json

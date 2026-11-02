@@ -1,0 +1,39 @@
+[build-system]
+requires = ["scikit-build-core==0.10.7", "pybind11==2.13.6"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "annvil"
+version = "0.1.0"
+description = "HNSW vector search with NEON kernels, mmap persistence and product quantization"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = ["numpy==2.1.3"]
+
+[dependency-groups]
+dev = ["pytest==8.3.4", "ruff==0.8.4"]
+bench = ["h5py==3.12.1", "matplotlib==3.9.3"]
+
+[tool.scikit-build]
+wheel.packages = []
+build-dir = "build/python"
+cmake.version = ">=3.24"
+
+[tool.scikit-build.cmake.define]
+ANNVIL_BUILD_TESTS = "OFF"
+ANNVIL_BUILD_TOOLS = "OFF"
+ANNVIL_BUILD_PYTHON = "ON"
+
+[tool.uv]
+default-groups = ["dev", "bench"]
+
+[tool.pytest.ini_options]
+testpaths = ["python/tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
