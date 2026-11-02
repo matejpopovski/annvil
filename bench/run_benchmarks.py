@@ -14,7 +14,6 @@ from __future__ import annotations
 import argparse
 import json
 import platform
-import shutil
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -227,8 +226,6 @@ def main() -> None:
             step_env()
         else:
             STEPS[step](args.index_dir)
-    if args.index_dir == REPO / "build" / "indexes" and shutil.which("du"):
-        print(output("du", "-sh", str(args.index_dir)))
 
 
 if __name__ == "__main__":

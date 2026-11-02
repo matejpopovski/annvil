@@ -1,7 +1,7 @@
 // Distance kernels. The right one is chosen at compile time so the search loop
-// can inline it: an indirect call per distance is measurable at 25 dimensions.
-// NEON is the tuned path. SSE2 and AVX2 exist so x86 builds stay correct and
-// reasonable, and the scalar kernels are the reference the tests compare against.
+// can inline it. NEON is the tuned path. SSE2 and AVX2 exist so x86 builds stay
+// correct and reasonable, and the scalar kernels are the reference the tests
+// compare against.
 #pragma once
 
 #include <cstddef>
@@ -40,7 +40,7 @@ inline float dot_scalar(const float* a, const float* b, std::size_t n) noexcept 
 }
 
 #if defined(ANNVIL_HAVE_NEON)
-// Four accumulators, because the P-cores issue four FMLA per cycle and a single
+// Four accumulators, so the FMLAs in one iteration are independent. A single
 // accumulator would serialize them on its own register dependency.
 inline float l2_sq_neon(const float* a, const float* b, std::size_t n) noexcept {
   float32x4_t s0 = vdupq_n_f32(0.0f);
